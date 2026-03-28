@@ -1,0 +1,10 @@
+Mini Valorant body { margin:0; overflow:hidden; background:#111; } canvas { display:block; } const canvas = document.getElementById("game"); const ctx = canvas.getContext("2d"); canvas.width = window.innerWidth; canvas.height = window.innerHeight; 
+
+let player = { x: canvas.width/2, y: canvas.height/2, size: 20, color: "lime" }; let enemy = { x: 100, y: 100, size: 20, color: "red" }; let bullets = [];
+
+// Dokunma ile ateş canvas.addEventListener("touchstart", (e) => { let touch = e.touches[0]; bullets.push({ x: player.x, y: player.y, dx: (touch.clientX - player.x)/20, dy: (touch.clientY - player.y)/20 }); });
+
+// Oyuncu hareketi canvas.addEventListener("touchmove", (e) => { let touch = e.touches[0]; player.x = touch.clientX; player.y = touch.clientY; });
+
+function update() { bullets.forEach(b => { b.x += b.dx; b.y
+
