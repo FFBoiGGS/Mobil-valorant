@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Mini Oyun</title>
+<style>
+body{margin:0;background:black}
+canvas{display:block}
+</style>
+</head>
+<body>
+
+<canvas id="c"></canvas>
+
+<script>
+const c = document.getElementById("c");
+const ctx = c.getContext("2d");
+
+c.width = window.innerWidth;
+c.height = window.innerHeight;
+
+let player = {x:200,y:200};
+let enemy = {x:100,y:100};
+let bullets = [];
+let score = 0;
+
+c.addEventListener("touchmove", e=>{
+let t=e.touches[0];
+player.x=t.clientX;
+player.y=t.clientY;
+});
+
+c.addEventListener("touchstart", e=>{
+let t=e.touches[0];
+bullets.push({
+x:player.x,
+y:player.y,
+dx:(t.clientX-player.x)/20,
+dy:(t.clientY-player.y)/20
+});
+});
+
+function update(){
+bullets.forEach(b=>{
+b.x+=b.dx;
+b.y+=b.dy;
+});
+
+bullets.forEach((b,i)=>{
+if(Math.hypot(b.x-enemy.x,b.y-enemy.y)<20){
+score++;
+enemy.x=Math.random()*c.width;
+enemy.y=Math.random()*c.height;
+bullets.splice(i,1);
+}
+});
+}
+
+function draw(){
+ctx.clearRect(0,0,c.width,c.height);
+
+// player
+ctx.fillStyle="lime";
+ctx.beginPath();
+ctx.arc(player.x,player.y,20,0,Math.PI*2);
+ctx.fill();
+
+// enemy
+ctx.fillStyle="red";
+ctx.beginPath();
+ctx.arc(enemy.x,enemy.y,20,0,Math.PI*2);
+ctx.fill();
+
+// bullets
+ctx.fillStyle="white";
+bullets.forEach(b=>{
+ctx.beginPath();
+ctx.arc(b.x,b.y,5,0,Math.PI*2);
+ctx.fill();
+});
+
+// score
+ctx.fillStyle="white";
+ctx.font="20px Arial";
+ctx.fillText("Skor: "+score,20,30);
+}
+
+function loop(){
+update();
+draw();
+requestAnimationFrame(loop);
+}
+
+loop();
+</script>
+
+</body>
+</html>
